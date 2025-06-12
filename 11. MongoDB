@@ -1,0 +1,33 @@
+pip install pymongo 
+
+from pymongo import MongoClient 
+
+client = MongoClient("mongodb://localhost:27017/") 
+
+db = client['mydatabase'] 
+collection = db['users'] 
+
+user_data = { 
+'name': 'John Doe', 
+'age': 30, 
+'email': 'john.doe@example.com' 
+} 
+
+# CREATE operation: Insert a document 
+result = collection.insert_one(user_data) 
+print(f"Document inserted with ID: {result.inserted_id}") 
+
+# READ operation: Find a single document by name 
+user = collection.find_one({"name": "John Doe"}) 
+print("Found user:", user) 
+
+# UPDATE operation: Update the user's age 
+update_result = collection.update_one( 
+{"name": "John Doe"}, 
+{"$set": {"age": 31}} 
+) 
+print(f"Documents matched: {update_result.matched_count}, Documents modified: {update_result.modified_count}") 
+      
+# DELETE operation: Delete a user by name 
+delete_result = collection.delete_one({"name": "John Doe"}) 
+print(f"Documents deleted: {delete_result.deleted_count}") 
