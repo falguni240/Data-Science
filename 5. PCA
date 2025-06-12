@@ -1,0 +1,30 @@
+import numpy as np 
+import pandas as pd 
+import matplotlib.pyplot as plt 
+from sklearn.decomposition import PCA 
+from sklearn.preprocessing import StandardScaler 
+from sklearn.model_selection import train_test_split 
+
+df = pd.read_csv('log.csv') 
+
+print(df.head()) 
+
+
+X = df.iloc[:, :-1].values  # All rows, all columns except the last one 
+y = df.iloc[:, -1].values   # Last column is the target 
+
+scaler = StandardScaler() 
+X_scaled = scaler.fit_transform(X) 
+
+pca = PCA(n_components=2)  # Reduce to 2 components for visualization 
+X_pca = pca.fit_transform(X_scaled) 
+
+print("Explained variance ratio:", pca.explained_variance_ratio_) 
+
+plt.figure(figsize=(8,6)) 
+plt.scatter(X_pca[:, 0], X_pca[:, 1], c=y, cmap='viridis', edgecolor='k', s=100) 
+plt.title("PCA of Dataset") 
+plt.xlabel("Principal Component 1") 
+plt.ylabel("Principal Component 2") 
+plt.colorbar(label='Target Class') 
+plt.show() 
